@@ -12,6 +12,7 @@ import "./App.css";
 
 import Login from "./Login";
 import SignUp from "./Register";
+import Database from "./Database";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,7 +23,7 @@ import { auth } from "./Firebase";
 function App() {
   const [user, setUser] = useState();
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(() => {
       setUser(user);
     });
   });
@@ -39,6 +40,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<SignUp />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/Database" element={<Database />} />
             </Routes>
             <ToastContainer />
           </div>
