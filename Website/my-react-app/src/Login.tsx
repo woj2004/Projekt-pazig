@@ -26,6 +26,7 @@ function Login() {
   };
 
   return (
+    <div style={{maxWidth: '500px', width: '100%', margin: '0 auto'}}>
     <form onSubmit={handleSubmit}>
       <h3>Login</h3>
 
@@ -61,6 +62,7 @@ function Login() {
       </p>
       
     </form>
+    </div>
   );
 }
 

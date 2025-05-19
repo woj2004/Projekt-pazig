@@ -1,37 +1,45 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { auth, db } from "./Firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { toast } from "react-toastify";
 import { Form } from "react-bootstrap";
+import Patient from "./assets/Patient";
+import Button from 'react-bootstrap/Button';
 
-function PatientList() {
+function PatientList({onClick1}) {
   const [patients, setPatients] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedPatientId, setSelectedPatientId] = useState(null);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        toast.error("Musisz być zalogowany!", { position: "top-center" });
-        return;
-      }
+useEffect(() => {
+  const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      toast.error("Musisz być zalogowany!", { position: "top-center" });
+      return;
+    }
 
-      try {
-        const patientsCollection = collection(db, "Users", user.uid, "Patients");
-        const snapshot = await getDocs(patientsCollection);
-        const patientsData = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setPatients(patientsData);
-      } catch (error) {
-        console.error("Błąd podczas pobierania pacjentów:", error.message);
-        toast.error("Nie udało się pobrać pacjentów", { position: "top-center" });
-      }
+    const patientsCollection = collection(db, "Users", user.uid, "Patients");
+
+    const unsubscribeSnapshot = onSnapshot(patientsCollection, (snapshot) => {
+      const patientsData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setPatients(patientsData);
+    }, (error) => {
+      console.error("Błąd podczas pobierania pacjentów:", error.message);
+      toast.error("Nie udało się pobrać pacjentów", { position: "top-center" });
     });
 
-    return () => unsubscribe(); // czyścimy listener przy odmontowaniu
-  }, []);
+    // Cleanup
+    return () => {
+      unsubscribeSnapshot();
+    };
+  });
+
+  return () => unsubscribeAuth(); // cleanup auth listener
+}, []);
 
   // Filtrowanie pacjentów po imieniu, nazwisku lub PESEL
   const filteredPatients = patients.filter(patient =>
@@ -41,7 +49,20 @@ function PatientList() {
   );
 
   return (
+    
     <div className="container mt-4">
+      { selectedPatientId ? (
+       
+        <Patient
+          patientId={selectedPatientId}
+          patient={patients.find(p => p.id === selectedPatientId)}
+          onClose={() => setSelectedPatientId(null)}
+        />) : ( <>
+        <div className="d-flex justify-content-end gap-3 mt-3 me-3 mb-3">
+        <Button type="button" className="btn btn-dark" onClick={onClick1}>
+          Dodaj pacjenta!
+        </Button>
+        </div>
       <Form.Control
         type="text"
         placeholder="Wyszukaj po imieniu, nazwisku lub numeru PESEL"
@@ -62,7 +83,7 @@ function PatientList() {
         <tbody>
           {filteredPatients.length > 0 ? (
             filteredPatients.map((patient, index) => (
-              <tr key={patient.id}>
+              <tr key={patient.id} style={{ cursor: "pointer" }}  onClick={() => setSelectedPatientId(patient.id)}>
                 <th scope="row">{index + 1}</th>
                 <td>{patient.name}</td>
                 <td>{patient.surname}</td>
@@ -75,7 +96,8 @@ function PatientList() {
             </tr>
           )}
         </tbody>
-      </table>
+      </table> </>
+        )}
     </div>
   );
 }
