@@ -7,7 +7,7 @@ function VisitList({ patientId}) {
   const [visits, setVisits] = useState([]);
 
   useEffect(() => {
-    if (!patientId) return;                // bezpieczeństwo
+    if (!patientId) return;                
 
     const user = auth.currentUser;
     if (!user) {
@@ -57,7 +57,7 @@ function VisitList({ patientId}) {
               <h5 className="card-title text-start">Diagnoza: {visit.diagnosis}</h5>
               <p className="card-text  text-start">{visit.note}</p>
               <p className="card-text">
-                <small className="text-muted">Data: {visit.date}</small>
+                <small className="text-muted">Data: {visit.date.replace("T"," ")}</small>
               </p>
             </div>
           </div>

@@ -21,7 +21,7 @@ function NavBar(){
             <Navbar.Brand href="#home" className="me-3">Baza Przychodni</Navbar.Brand>
             <Nav.Link href="/Profile">Kalendarz</Nav.Link>
             <Nav.Link href="/Database">Pacjenci</Nav.Link>
-              <button type="button" class="btn btn-outline-danger" onClick={handleLogout}>Wyloguj się</button>
+              <button type="button" className="btn btn-outline-danger" onClick={handleLogout}>Wyloguj się</button>
             </Nav>
         </Container>
         </Navbar>

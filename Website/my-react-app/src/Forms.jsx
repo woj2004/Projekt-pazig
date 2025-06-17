@@ -14,8 +14,8 @@ function Forms({showForm, setShowForm, patients, setPatients, addEvent}){
     const handleSave = () => {
         if (selectedPatientId && startTime && duration) {
           addEvent(selectedPatientId, startTime, duration);
-          setShowForm(false);  // Zamknij modal po zapisaniu
-          // Wyczyść pola formularza:
+          setShowForm(false);  
+          
           setSelectedPatientId('');
           setStartTime('');
           setDuration('');

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { auth, db } from "../Firebase";
+import { auth, db } from "./Firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { toast } from "react-toastify";
 
@@ -41,10 +41,12 @@ function AddVisit({ patientId, onClose, onReady}){
       <h5>Dodaj wizytę</h5>
       <form onSubmit={handleAddVisit}>
         <div className="mb-3">
+          <div>
           <label>Data wizyty</label>
+          </div>
           <input
-            type="date"
-            className="form-control"
+            type="datetime-local"
+            placeholder="Start"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required

@@ -4,7 +4,7 @@ import { auth, db } from "./Firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { toast } from "react-toastify";
 import { Form } from "react-bootstrap";
-import Patient from "./assets/Patient";
+import Patient from "./Patient";
 import Button from 'react-bootstrap/Button';
 
 function PatientList({onClick1}) {
@@ -38,10 +38,10 @@ useEffect(() => {
     };
   });
 
-  return () => unsubscribeAuth(); // cleanup auth listener
+  return () => unsubscribeAuth(); 
 }, []);
 
-  // Filtrowanie pacjentów po imieniu, nazwisku lub PESEL
+
   const filteredPatients = patients.filter(patient =>
     `${patient.name} ${patient.surname} ${patient.pesel}`
       .toLowerCase()

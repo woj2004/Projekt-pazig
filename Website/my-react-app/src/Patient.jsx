@@ -1,6 +1,6 @@
 import { useState } from "react"
 import AddVisit from "./AddVisit";
-import VisitList from "../VisitList";
+import VisitList from "./VisitList";
 
 
 function Patient({ patientId, onClose, patient }){
